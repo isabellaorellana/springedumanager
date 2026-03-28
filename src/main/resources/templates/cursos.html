@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cursos - EduManager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f7f6; padding: 40px; }
+        .table-container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        th { background-color: #2c3e50; color: white; border: none; }
+        .badge-active { background-color: #27ae60; }
+        .badge-inactive { background-color: #95a5a6; }
+    </style>
+</head>
+<body>
+    <div class="container table-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-dark">Cursos Registrados</h2>
+            <a th:href="@{/}" class="btn btn-primary shadow-sm">+ Crear Nuevo Curso</a>
+        </div>
+        
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Canal</th>
+                    <th>Código SENCE</th>
+                    <th>Nombre del Curso</th>
+                    <th>Horas</th>
+                    <th>Área / Categoría</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${listaCursos}">
+                    <td th:text="${c.canal}"></td>
+                    <td th:text="${c.codigo}"></td>
+                    <td th:text="${c.nombre}"></td>
+                    <td th:text="${c.duracionHoras}"></td>
+                    <td th:text="${c.categoria}"></td>
+                    <td>
+                        <span th:class="${c.activo} ? 'badge badge-active' : 'badge badge-inactive'"
+                              th:text="${c.activo ? 'Activo' : 'Inactivo'}">
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

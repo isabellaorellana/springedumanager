@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Estudiantes - EduManager</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+        .container { padding: 40px; max-width: 1000px; margin: auto; }
+        .btn-add { display: inline-block; background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        th { background: var(--primary); color: white; padding: 15px; text-align: left; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        tr:nth-child(even) { background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="font-weight: bold;">🎓 SpringEduManager</div>
+        <div><a href="/">Inicio</a><a href="/estudiantes">Estudiantes</a><a href="/cursos">Cursos</a></div>
+    </nav>
+    <div class="container">
+        <h1>Gestión de Estudiantes</h1>
+        <a href="/estudiantes/nuevo" class="btn-add">+ Registrar Nuevo Estudiante</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo Electrónico</th>
+                    <th>Curso Asignado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="est : ${estudiantes}">
+                    <td th:text="${est.id}"></td>
+                    <td th:text="${est.nombre}"></td>
+                    <td th:text="${est.email}"></td>
+                    <td th:text="${est.curso}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
