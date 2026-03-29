@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Portal - EduManager</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        .navbar { background: var(--primary); padding: 15px 40px; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .container { padding: 40px; max-width: 800px; margin: auto; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .progress-bar { background: #eee; border-radius: 20px; height: 20px; width: 100%; margin: 20px 0; overflow: hidden; }
+        .progress-fill { background: var(--accent); height: 100%; transition: width 0.5s; }
+        .info { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .btn-logout { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-logout:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="font-size: 1.2rem; font-weight: bold;">🎓 EduManager Estudiantes</div>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <div class="card" th:if="${estudiante != null}">
+            <h1 th:text="'¡Bienvenida, ' + ${estudiante.nombre} + '!'">¡Hola!</h1>
+            
+            <p>Estás inscrita en el curso: 
+                <strong th:text="${estudiante.curso != null ? estudiante.curso.nombre : 'Sin curso asignado'}">Curso</strong>
+            </p>
+            
+            <h3>Tu Progreso Actual:</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="|width: ${estudiante.progreso ?: 0}%|"></div>
+            </div>
+            <p th:text="${(estudiante.progreso ?: 0) + '% completado'}"></p>
+
+            <div class="info">
+                <p><strong>Email registrado:</strong> <span th:text="${estudiante.email}"></span></p>
+                <p><strong>Estado:</strong> <span style="color: #27ae60; font-weight: bold;">Activa</span></p>
+            </div>
+        </div>
+        
+        <div class="card" th:unless="${estudiante != null}">
+            <h1>Ops! No pudimos cargar tu información.</h1>
+            <p>Es posible que tu sesión haya expirado.</p>
+            <a th:href="@{/}" style="color: var(--accent);">Volver al inicio de sesión</a>
+        </div>
+    </div>
+</body>
+</html>

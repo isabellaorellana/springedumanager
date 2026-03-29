@@ -26,12 +26,13 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/css/**", "/js/**", "/img/**").permitAll() 
                 .requestMatchers("/admin/**").hasRole("ADMIN") 
+                .requestMatchers("/estudiante/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/") 
                 .loginProcessingUrl("/login") 
-                .defaultSuccessUrl("/admin/dashboard", true) 
+                .defaultSuccessUrl("/home", true) 
                 .failureUrl("/?error=true") 
                 .usernameParameter("username")
                 .passwordParameter("password")
@@ -49,20 +50,19 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(EstudianteRepository repo) {
         return email -> {
-            System.out.println("🔍 DEBUG: Intentando buscar al usuario: [" + email + "]");
+            System.out.println("🔍 [LOGIN ATTEMPT] Email: " + email);
             
             Estudiante est = repo.findByEmail(email)
-                .orElseThrow(() -> {
-                    System.out.println("❌ DEBUG: Usuario no encontrado en BD para: " + email);
-                    return new UsernameNotFoundException("Usuario no encontrado");
-                });
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
-            System.out.println("✅ DEBUG: Usuario encontrado. Password en BD (Hash): " + est.getPassword());
+            String role = est.getEmail().equals("admin@otec.cl") ? "ADMIN" : "USER";
+            
+            System.out.println("✅ Usuario: " + est.getNombre() + " | Rol asignado: " + role);
 
             return User.builder()
                 .username(est.getEmail())
                 .password(est.getPassword())
-                .roles("ADMIN") 
+                .roles(role) 
                 .build();
         };
     }
