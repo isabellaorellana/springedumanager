@@ -15,31 +15,30 @@ public class EstudianteController {
     private EstudianteRepository estudianteRepository;
 
     @GetMapping("/home")
-    public String home(Authentication auth) {
-        if (auth == null) return "redirect:/index";
+public String home(Authentication auth) {
+    if (auth == null) return "redirect:/"; 
 
-        boolean isAdmin = auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    boolean isAdmin = auth.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        if (isAdmin) {
-            return "redirect:/admin/dashboard"; 
-        } else {
-            return "redirect:/estudiante/dashboard"; 
-        }
+    if (isAdmin) {
+        return "redirect:/admin/dashboard"; 
+    } else {
+        return "redirect:/estudiante/dashboard"; 
     }
+}
 
-    @GetMapping("/estudiante/dashboard")
-    public String estudianteDashboard(Model model, Authentication auth) {
-        if (auth == null) return "redirect:/index";
+@GetMapping("/estudiante/dashboard")
+public String estudianteDashboard(Model model, Authentication auth) {
+    if (auth == null) return "redirect:/"; 
 
-        String email = auth.getName();
-        
-        Estudiante estudiante = estudianteRepository.findByEmail(email).orElse(null);
-        
-        if (estudiante != null) {
-            model.addAttribute("estudiante", estudiante);
-        }
-        
-        return "estudiante-dashboard"; 
+    String email = auth.getName();
+    Estudiante estudiante = estudianteRepository.findByEmail(email).orElse(null);
+    
+    if (estudiante != null) {
+        model.addAttribute("estudiante", estudiante);
     }
+    
+    return "estudiante-dashboard"; 
+}
 }

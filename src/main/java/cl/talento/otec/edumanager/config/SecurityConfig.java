@@ -35,19 +35,18 @@ public class SecurityConfig {
             )
 
             .formLogin(form -> form
-            .loginPage("/") 
-            .loginProcessingUrl("/login")
-            .successHandler((request, response, authentication) -> {
-             response.sendRedirect("/home");
+    .loginPage("/")
+    .loginProcessingUrl("/login")
+    .defaultSuccessUrl("/home", true)
+    .failureHandler((request, response, exception) -> {
+        System.out.println("❌ ERROR DE LOGIN: " + exception.getMessage());
+        response.sendRedirect("/?error=true");
     })
-    .failureUrl("/?error=true")
-    .usernameParameter("username")
-    .passwordParameter("password")
     .permitAll()
 )
 .logout(logout -> logout
     .logoutUrl("/logout")
-    .logoutSuccessUrl("/") // Cambia esto de "/?logout=true" a solo "/" para probar
+    .logoutSuccessUrl("/")
     .permitAll()
 );
             

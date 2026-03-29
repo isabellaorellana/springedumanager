@@ -33,6 +33,18 @@ public class EdumanagerApplication {
             System.out.println("📧 Usuario: admin@otec.cl");
             System.out.println("🔑 Clave: admin123");
             System.out.println("----------------------------------------------");
-        };
-    }
-}
+
+            repo.findByEmail("elenanito@gmail.com").ifPresent(elena -> {
+            elena.setPassword(encoder.encode("elena123"));
+            repo.save(elena);
+            System.out.println("✅ ELENA SINCRONIZADA: Ahora puede entrar con elena123");
+        });
+        repo.findByEmail("elsapatito@gmail.com").ifPresent(elsa -> {
+            elsa.setPassword(encoder.encode("elsa123"));
+            repo.save(elsa);
+            System.out.println("✅ ELSA SINCRONIZADA: Ahora puede entrar con elena123");
+        });
+        
+    };
+} };
+    
