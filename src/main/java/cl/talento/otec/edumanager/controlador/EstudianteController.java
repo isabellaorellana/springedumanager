@@ -16,7 +16,7 @@ public class EstudianteController {
 
     @GetMapping("/home")
     public String home(Authentication auth) {
-        if (auth == null) return "redirect:/";
+        if (auth == null) return "redirect:/index";
 
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -30,6 +30,7 @@ public class EstudianteController {
 
     @GetMapping("/estudiante/dashboard")
     public String estudianteDashboard(Model model, Authentication auth) {
+        if (auth == null) return "redirect:/index";
 
         String email = auth.getName();
         
@@ -39,6 +40,6 @@ public class EstudianteController {
             model.addAttribute("estudiante", estudiante);
         }
         
-        return "estudiante-dashboard";
+        return "estudiante-dashboard"; 
     }
 }

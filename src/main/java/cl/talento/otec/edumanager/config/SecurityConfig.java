@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,51 +23,54 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        )
             .authenticationProvider(authProvider)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/css/**", "/js/**", "/img/**").permitAll() 
-                .requestMatchers("/admin/**").hasRole("ADMIN") 
-                .requestMatchers("/estudiante/**").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated()
+            .requestMatchers("/", "/login", "/home", "/css/**", "/js/**", "/img/**", "/static/**").permitAll() 
+            .requestMatchers("/admin/**").hasRole("ADMIN") 
+            .requestMatchers("/estudiante/**").hasAnyRole("USER", "ADMIN")
+            .anyRequest().authenticated()
             )
-            .formLogin(form -> form
-                .loginPage("/") 
-                .loginProcessingUrl("/login") 
-                .defaultSuccessUrl("/home", true) 
-                .failureUrl("/?error=true") 
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/?logout=true")
-                .permitAll()
-            );
 
+            .formLogin(form -> form
+            .loginPage("/") 
+            .loginProcessingUrl("/login")
+            .successHandler((request, response, authentication) -> {
+             response.sendRedirect("/home");
+    })
+    .failureUrl("/?error=true")
+    .usernameParameter("username")
+    .passwordParameter("password")
+    .permitAll()
+)
+.logout(logout -> logout
+    .logoutUrl("/logout")
+    .logoutSuccessUrl("/") // Cambia esto de "/?logout=true" a solo "/" para probar
+    .permitAll()
+);
+            
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(EstudianteRepository repo) {
-        return email -> {
-            System.out.println("🔍 [LOGIN ATTEMPT] Email: " + email);
-            
-            Estudiante est = repo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+public UserDetailsService userDetailsService(EstudianteRepository repo) {
+    return email -> {
+        Estudiante est = repo.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-            String role = est.getEmail().equals("admin@otec.cl") ? "ADMIN" : "USER";
-            
-            System.out.println("✅ Usuario: " + est.getNombre() + " | Rol asignado: " + role);
+        String role = est.getEmail().equals("admin@otec.cl") ? "ADMIN" : "USER";
+        
+        System.out.println("✅ VALIDADO: " + est.getNombre() + " | Rol: " + role);
 
-            return User.builder()
-                .username(est.getEmail())
-                .password(est.getPassword())
-                .roles(role) 
-                .build();
-        };
-    }
-
+        return User.builder()
+            .username(est.getEmail())
+            .password(est.getPassword())
+            .roles(role)
+            .build();
+    };
+}
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
