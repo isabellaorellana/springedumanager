@@ -2,32 +2,105 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Administración - EduManager</title>
+    <title>EduManager - Iniciar Sesión</title>
     <style>
         :root { --primary: #2c3e50; --accent: #3498db; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
-        .container { text-align: center; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 80%; max-width: 600px; }
-        h1 { color: var(--primary); margin-bottom: 30px; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 10px; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .menu-item { background: var(--accent); color: white; padding: 25px; border-radius: 10px; text-decoration: none; font-weight: bold; transition: 0.3s; font-size: 1.1rem; }
-        .menu-item:hover { background: #2980b9; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4); }
-        .logout-btn { margin-top: 30px; display: inline-block; color: #e74c3c; text-decoration: none; font-weight: 600; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+        .login-container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
+        h1 { color: var(--primary); margin-bottom: 20px; font-size: 2rem; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; color: #7f8c8d; font-weight: 600; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 5px rgba(52, 152, 219, 0.3); }
+        .btn-login { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            width: 100%; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 1.1rem;
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-top: 10px;
+        }
+        .btn-login:hover { background: #2980b9; transform: translateY(-2px); }
+        .error-msg { 
+            background: #fdeaea; 
+            color: #e74c3c; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+            font-size: 0.9rem; 
+            border: 1px solid #fadbd8;
+        }
+        .logout-msg { 
+            background: #e8f8f5; 
+            color: #27ae60; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+            font-size: 0.9rem; 
+            border: 1px solid #d1f2eb;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>EduManager: Gestión OTEC</h1>
-        <div class="menu-grid">
-            <a th:href="@{/admin/cursos}" class="menu-item">Ver Lista de Cursos</a>
-            <a th:href="@{/admin/cursos/nuevo}" class="menu-item">Registrar Nuevo Curso</a>
-            
-            <a th:href="@{/admin/estudiantes}" class="menu-item">Ver Lista de Estudiantes</a>
-            <a th:href="@{/admin/estudiantes/nuevo}" class="menu-item">Inscribir Estudiante</a>
+
+    <div class="login-container">
+        <h1>EduManager</h1>
+        <p style="color: #95a5a6; margin-bottom: 30px;">Acceso al Sistema OTEC</p>
+
+        <div th:if="${param.error}" class="error-msg">
+            <strong>Error:</strong> Correo o contraseña incorrectos.
         </div>
-        
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="logout-btn" style="border:none; background:none; cursor:pointer;">Cerrar Sesión</button>
+
+        <div th:if="${param.logout}" class="logout-msg">
+            Sesión cerrada con éxito.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Correo Electrónico</label>
+                <input type="email" id="username" name="username" placeholder="admin@otec.cl" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Entrar</button>
         </form>
+        
+        <p style="margin-top: 25px; font-size: 0.8rem; color: #bdc3c7;">
+            &copy; 2026 EduManager - Panel de Control
+        </p>
     </div>
+
 </body>
 </html>

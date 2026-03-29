@@ -2,53 +2,77 @@ package cl.talento.otec.edumanager.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import cl.talento.otec.edumanager.modelo.Estudiante;
+import cl.talento.otec.edumanager.repositorio.EstudianteRepository;
+
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) 
+            .csrf(csrf -> csrf.disable())
+            .authenticationProvider(authProvider) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                .requestMatchers("/api/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/", "/login", "/css/**", "/js/**", "/img/**").permitAll() 
+                .requestMatchers("/admin/**").hasRole("ADMIN") 
                 .anyRequest().authenticated()
             )
-            .formLogin(login -> login
-                .defaultSuccessUrl("/", true)
+            .formLogin(form -> form
+                .loginPage("/") 
+                .loginProcessingUrl("/login") 
+                .defaultSuccessUrl("/admin/dashboard", true) 
+                .failureUrl("/?error=true") 
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/?logout=true")
                 .permitAll()
             );
-        
+
         return http.build();
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-            .username("admin@otec.cl")
-            .password("123456")
-            .roles("ADMIN")
-            .build();
+    public UserDetailsService userDetailsService(EstudianteRepository repo) {
+        return email -> {
+            System.out.println("DEBUG: Buscando en BD a -> " + email);
+            Estudiante est = repo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No encontrado: " + email));
+
+            System.out.println("DEBUG: Encontrado. Hash en BD: " + est.getPassword());
             
-        UserDetails student = User.withDefaultPasswordEncoder()
-            .username("estudiante@otec.cl")
-            .password("123456")
-            .roles("USER")
-            .build();
-            
-        return new InMemoryUserDetailsManager(admin, student);
+            return User.builder()
+                .username(est.getEmail())
+                .password(est.getPassword())
+                .roles("ADMIN") 
+                .build();
+        };
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, BCryptPasswordEncoder encoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(encoder);
+        return authProvider;
     }
 }

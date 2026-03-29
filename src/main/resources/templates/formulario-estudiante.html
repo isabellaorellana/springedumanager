@@ -2,26 +2,91 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registrar Estudiante - EduManager</title>
+    <title>Gestión de Estudiante - EduManager</title>
     <style>
-        :root { --primary: #3498db; --bg: #f4f7f6; --text: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { text-align: center; color: var(--text); margin-bottom: 25px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        :root { 
+            --primary: #3498db; 
+            --bg: #f4f7f6; 
+            --text: #2c3e50; 
+            --accent-hover: #2980b9;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 450px; 
+        }
+        h2 { 
+            text-align: center; 
+            color: var(--text); 
+            margin-bottom: 25px; 
+            border-bottom: 3px solid var(--primary); 
+            padding-bottom: 10px; 
+        }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
-        .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .btn-submit:hover { background: #2980b9; }
-        .link-back { display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none; font-size: 0.9rem; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #555; 
+        }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+        }
+        input:focus, select:focus { 
+            outline: none; 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
+        }
+        .btn-submit { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 1rem; 
+            margin-top: 10px;
+        }
+        .btn-submit:hover { background: var(--accent-hover); }
+        .link-back { 
+            display: block; 
+            text-align: center; 
+            margin-top: 15px; 
+            color: #7f8c8d; 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+        }
+        .link-back:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>Registrar Nuevo Estudiante</h2>
+        <h2 th:text="${estudiante.id != null ? 'Editar Estudiante' : 'Registrar Nuevo Estudiante'}">Registrar Estudiante</h2>
+        
         <form th:action="@{/admin/estudiantes/guardar}" th:object="${estudiante}" method="post">
             
+            <input type="hidden" th:field="*{id}" />
+
             <div class="form-group">
                 <label>Nombre Completo:</label>
                 <input type="text" th:field="*{nombre}" placeholder="Ej. Isabella Orellana" required>
@@ -29,21 +94,26 @@
 
             <div class="form-group">
                 <label>Correo Electrónico:</label>
-                <input type="email" th:field="*{email}" placeholder="isa.orellanaj@gmail.com" required>
+                <input type="email" th:field="*{email}" placeholder="ejemplo@correo.com" required>
             </div>
 
             <div class="form-group">
-                <label>Seleccionar Curso:</label>
+                <label>Asignar Curso:</label>
                 <select th:field="*{curso}" required>
-                    <option value="" disabled selected>-- Elija un curso disponible --</option>
+                    <option value="" th:disabled="${estudiante.id != null}">-- Seleccione un curso --</option>
                     <option th:each="c : ${listaCursos}" 
                             th:value="${c.id}" 
-                            th:text="${c.nombre}">
+                            th:text="${c.nombre}"
+                            th:selected="${estudiante.curso != null && c.id == estudiante.curso.id}">
                     </option>
                 </select>
             </div>
 
-            <button type="submit" class="btn-submit">Guardar Estudiante</button>
+            <button type="submit" class="btn-submit" 
+                    th:text="${estudiante.id != null ? 'Actualizar Datos' : 'Guardar Estudiante'}">
+                Guardar Estudiante
+            </button>
+            
             <a th:href="@{/admin/estudiantes}" class="link-back">Cancelar y volver</a>
         </form>
     </div>

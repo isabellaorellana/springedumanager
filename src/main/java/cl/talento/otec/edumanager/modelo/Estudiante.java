@@ -14,13 +14,17 @@ public class Estudiante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String nombre;
     private String email;
     private Double progreso;
+    
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -32,4 +36,7 @@ public class Estudiante {
     public void setProgreso(Double progreso) { this.progreso = progreso; }
     public Curso getCurso() { return curso; }
     public void setCurso(Curso curso) { this.curso = curso; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

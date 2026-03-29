@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración - EduManager</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        .navbar { background: var(--primary); padding: 15px 40px; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .container { padding: 50px; display: flex; gap: 30px; justify-content: center; }
+        .menu-card { 
+            background: white; padding: 40px; border-radius: 15px; width: 250px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
+            text-decoration: none; color: var(--primary);
+        }
+        .menu-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        .btn-logout { background: none; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="font-weight: bold;">🎓 SpringEduManager | ADMIN</div>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+    </nav>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>Panel de Gestión Académica</h1>
+        <p>Bienvenida, Isabella. Selecciona el área que deseas administrar.</p>
+    </div>
+
+    <div class="container">
+        <a th:href="@{/admin/cursos}" class="menu-card">
+            <span class="icon">📚</span>
+            <h3>Gestión de Cursos</h3>
+            <p>Ver, crear y editar la oferta académica.</p>
+        </a>
+
+        <a th:href="@{/admin/estudiantes}" class="menu-card">
+            <span class="icon">👥</span>
+            <h3>Gestión de Estudiantes</h3>
+            <p>Administrar matrículas y datos personales.</p>
+        </a>
+    </div>
+</body>
+</html>

@@ -4,86 +4,70 @@
     <meta charset="UTF-8">
     <title>Gestión de Cursos - EduManager</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; --danger: #e74c3c; --warning: #f1c40f; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
-        
-        .navbar { 
-            background: var(--primary); 
-            padding: 15px 40px; 
-            display: flex; 
-            justify-content: space-between; 
-            color: white; 
-            align-items: center;
-        }
+        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; }
         .navbar a { color: white; text-decoration: none; margin-left: 20px; }
-        .navbar a:hover { color: var(--accent); }
+        .container { padding: 40px; max-width: 1100px; margin: auto; }
+        .btn-add { display: inline-block; background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
         
-        .container { padding: 40px; max-width: 1000px; margin: auto; }
+        /* Estilos para Alertas */
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; font-weight: bold; text-align: center; animation: fadeIn 0.5s; }
+        .alert-success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .alert-info { color: #0c5460; background-color: #d1ecf1; border: 1px solid #bee5eb; }
         
-        .btn-add { 
-            display: inline-block; 
-            background: var(--accent); 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            margin-bottom: 20px; 
-        }
-        
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            background: white; 
-            border-radius: 8px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-        }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         th { background: var(--primary); color: white; padding: 15px; text-align: left; }
         td { padding: 15px; border-bottom: 1px solid #eee; }
-        tr:nth-child(even) { background: #f9f9f9; }
-        
+        .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; color: white; font-size: 0.8rem; margin-right: 5px; }
+        .btn-edit { background: var(--warning); color: #333; }
+        .btn-delete { background: var(--danger); }
         .status { font-weight: bold; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
         .active { color: #27ae60; }
         .inactive { color: #95a5a6; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div style="font-weight: bold;">🎓 SpringEduManager</div>
-        <div>
-            <a th:href="@{/}">Inicio</a>
+        <div style="display: flex; align-items: center;">
+            <a th:href="@{/admin/dashboard}">Inicio</a>
             <a th:href="@{/admin/estudiantes}">Estudiantes</a>
             <a th:href="@{/admin/cursos}">Cursos</a>
+            <form th:action="@{/logout}" method="post" style="margin-left: 15px;">
+                <button type="submit" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:5px;">Salir</button>
+            </form>
         </div>
     </nav>
 
     <div class="container">
         <h1>Gestión de Cursos</h1>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${info}" class="alert alert-info" th:text="${info}"></div>
+
         <a th:href="@{/admin/cursos/nuevo}" class="btn-add">+ Registrar Nuevo Curso</a>
         
         <table>
             <thead>
                 <tr>
-                    <th>Canal</th>
                     <th>Código SENCE</th>
-                    <th>Nombre del Curso</th>
+                    <th>Nombre</th>
                     <th>Horas</th>
                     <th>Área</th>
-                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="c : ${listaCursos}">
-                    <td th:text="${c.canal}"></td>
-                    <td th:text="${c.codigo}"></td>
-                    <td th:text="${c.nombre}" style="font-weight: bold;"></td>
-                    <td th:text="${c.duracionHoras} + ' hrs'"></td>
-                    <td th:text="${c.categoria}"></td>
+                    <td th:text="${c.codigo}">Código</td>
+                    <td th:text="${c.nombre}" style="font-weight: bold;">Nombre</td>
+                    <td th:text="${c.duracionHoras} + ' hrs'">0 hrs</td>
+                    <td th:text="${c.categoria}">Área</td>
                     <td>
-                        <span th:class="${c.activo} ? 'status active' : 'status inactive'"
-                              th:text="${c.activo ? 'Activo' : 'Inactivo'}">
-                        </span>
+                        <a th:href="@{/admin/cursos/editar/{id}(id=${c.id})}" class="btn-action btn-edit">Editar</a>
+                        <a th:href="@{/admin/cursos/eliminar/{id}(id=${c.id})}" class="btn-action btn-delete" onclick="return confirm('¿Eliminar curso?')">Eliminar</a>
                     </td>
                 </tr>
             </tbody>
