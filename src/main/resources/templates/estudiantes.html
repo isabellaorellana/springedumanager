@@ -2,52 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Estudiantes - EduManager</title>
+    <title>Gestión de Estudiantes - SpringEduManager</title>
     <style>
         :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; --danger: #e74c3c; --warning: #f1c40f; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
-        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; }
-        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
-        .container { padding: 40px; max-width: 1100px; margin: auto; }
-        .btn-add { display: inline-block; background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
         
-        /* Estilos para Alertas */
-        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; font-weight: bold; text-align: center; animation: fadeIn 0.5s; }
-        .alert-success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
-        .alert-info { color: #0c5460; background-color: #d1ecf1; border: 1px solid #bee5eb; }
-        
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        th { background: var(--primary); color: white; padding: 15px; text-align: left; }
-        td { padding: 15px; border-bottom: 1px solid #eee; }
-        .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; color: white; font-size: 0.8rem; margin-right: 5px; }
-        .btn-edit { background: var(--warning); color: #333; }
-        .btn-delete { background: var(--danger); }
-        .badge { background: #ecf0f1; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; color: #7f8c8d; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar .logo { font-size: 1.5rem; font-weight: bold; }
+        .navbar nav a { color: white; text-decoration: none; margin-left: 20px; transition: 0.3s; }
+        .navbar nav a:hover { color: var(--accent); }
+
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+        h1 { color: #333; margin-bottom: 30px; }
+
+
+        .btn-primary { 
+            display: inline-block; background: var(--accent); color: white; 
+            padding: 12px 24px; border-radius: 6px; text-decoration: none; 
+            font-weight: bold; margin-bottom: 25px; transition: 0.3s;
+            border: none; cursor: pointer;
+        }
+        .btn-primary:hover { background: #2980b9; transform: translateY(-2px); }
+
+        .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .data-table th { background: var(--primary); color: white; padding: 18px; text-align: left; font-size: 0.95rem; }
+        .data-table td { padding: 15px 18px; border-bottom: 1px solid #edf2f7; color: #4a5568; }
+        .data-table tr:hover { background-color: #f8fafc; }
+
+
+        .btn-edit { 
+            background: var(--warning); color: #333; padding: 8px 16px; 
+            border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; margin-right: 8px;
+        }
+        .btn-delete { 
+            background: var(--danger); color: white; padding: 8px 16px; 
+            border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
+            border: none; cursor: pointer;
+        }
+        .btn-edit:hover, .btn-delete:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div style="font-weight: bold;">🎓 SpringEduManager</div>
-        <div style="display: flex; align-items: center;">
+    <header class="navbar">
+        <div class="logo">🎓 SpringEduManager</div>
+        <nav>
             <a th:href="@{/admin/dashboard}">Inicio</a>
             <a th:href="@{/admin/estudiantes}">Estudiantes</a>
             <a th:href="@{/admin/cursos}">Cursos</a>
-            <form th:action="@{/logout}" method="post" style="margin-left: 15px;">
-                <button type="submit" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:5px;">Salir</button>
-            </form>
-        </div>
-    </nav>
+            <a th:href="@{/logout}">Salir</a>
+        </nav>
+    </header>
 
-    <div class="container">
+    <main class="container">
         <h1>Gestión de Estudiantes</h1>
-
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${info}" class="alert alert-info" th:text="${info}"></div>
-
-        <a th:href="@{/admin/estudiantes/nuevo}" class="btn-add">+ Registrar Nuevo Estudiante</a>
         
-        <table>
+        <div class="actions">
+            <a th:href="@{/admin/estudiantes/nuevo}" class="btn-primary">+ Registrar Nuevo Estudiante</a>
+        </div>
+
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -58,18 +71,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="est : ${listaEstudiantes}">
-                    <td th:text="${est.id}">ID</td>
-                    <td style="font-weight: bold;" th:text="${est.nombre}">Nombre</td>
-                    <td th:text="${est.email}">Email</td>
-                    <td><span class="badge" th:text="${est.curso?.nombre ?: 'Sin curso'}">Sin curso</span></td>
+                <tr th:each="est : ${estudiantes}" th:if="${est.email != 'admin@otec.cl'}">
+                    <td th:text="${est.id}"></td>
+                    <td th:text="${est.nombre}"></td>
+                    <td th:text="${est.email}"></td>
+                    <td th:text="${est.curso != null ? est.curso.nombre : 'Sin asignar'}"></td>
                     <td>
-                        <a th:href="@{/admin/estudiantes/editar/{id}(id=${est.id})}" class="btn-action btn-edit">Editar</a>
-                        <a th:href="@{/admin/estudiantes/eliminar/{id}(id=${est.id})}" class="btn-action btn-delete" onclick="return confirm('¿Eliminar estudiante?')">Eliminar</a>
+                        <a th:href="@{/admin/estudiantes/editar/{id}(id=${est.id})}" class="btn-edit">Editar</a>
+                        
+                        <a th:href="@{/admin/estudiantes/eliminar/{id}(id=${est.id})}" 
+                           class="btn-delete" 
+                           onclick="return confirm('¿Estás seguro de eliminar este estudiante?')">Eliminar</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
+    </main>
 </body>
 </html>

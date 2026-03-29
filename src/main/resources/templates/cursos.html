@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Cursos - EduManager</title>
-    <style>
+    <title>Gestión de Cursos - SpringEduManager</title>
+     <style>
         :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; --danger: #e74c3c; --warning: #f1c40f; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
         .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; }
@@ -29,27 +29,24 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div style="font-weight: bold;">🎓 SpringEduManager</div>
-        <div style="display: flex; align-items: center;">
+    <header class="navbar">
+        <div class="logo">🎓 SpringEduManager</div>
+        <nav>
             <a th:href="@{/admin/dashboard}">Inicio</a>
             <a th:href="@{/admin/estudiantes}">Estudiantes</a>
             <a th:href="@{/admin/cursos}">Cursos</a>
-            <form th:action="@{/logout}" method="post" style="margin-left: 15px;">
-                <button type="submit" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:5px;">Salir</button>
-            </form>
-        </div>
-    </nav>
+            <a th:href="@{/logout}" class="btn-logout">Salir</a>
+        </nav>
+    </header>
 
-    <div class="container">
+    <main class="container">
         <h1>Gestión de Cursos</h1>
-
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${info}" class="alert alert-info" th:text="${info}"></div>
-
-        <a th:href="@{/admin/cursos/nuevo}" class="btn-add">+ Registrar Nuevo Curso</a>
         
-        <table>
+        <div class="actions">
+            <a th:href="@{/admin/cursos/nuevo}" class="btn-primary">+ Registrar Nuevo Curso</a>
+        </div>
+
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>Código SENCE</th>
@@ -60,18 +57,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="c : ${listaCursos}">
-                    <td th:text="${c.codigo}">Código</td>
-                    <td th:text="${c.nombre}" style="font-weight: bold;">Nombre</td>
-                    <td th:text="${c.duracionHoras} + ' hrs'">0 hrs</td>
-                    <td th:text="${c.categoria}">Área</td>
+                <tr th:each="c : ${cursos}">
+                    <td th:text="${c.codigo}"></td>
+                    <td th:text="${c.nombre}"></td>
+                    <td th:text="${c.duracionHoras + 'h'}"></td>
+                    <td th:text="${c.categoria}"></td>
                     <td>
-                        <a th:href="@{/admin/cursos/editar/{id}(id=${c.id})}" class="btn-action btn-edit">Editar</a>
-                        <a th:href="@{/admin/cursos/eliminar/{id}(id=${c.id})}" class="btn-action btn-delete" onclick="return confirm('¿Eliminar curso?')">Eliminar</a>
+                        <a th:href="@{/admin/cursos/editar/{id}(id=${c.id})}" class="btn-edit">Editar</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
+    </main>
 </body>
 </html>
