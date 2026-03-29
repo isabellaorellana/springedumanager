@@ -3,29 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Cursos - SpringEduManager</title>
-     <style>
+    <style>
         :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; --danger: #e74c3c; --warning: #f1c40f; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
-        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; }
-        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
-        .container { padding: 40px; max-width: 1100px; margin: auto; }
-        .btn-add { display: inline-block; background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
         
-        /* Estilos para Alertas */
-        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; font-weight: bold; text-align: center; animation: fadeIn 0.5s; }
-        .alert-success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
-        .alert-info { color: #0c5460; background-color: #d1ecf1; border: 1px solid #bee5eb; }
-        
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        th { background: var(--primary); color: white; padding: 15px; text-align: left; }
-        td { padding: 15px; border-bottom: 1px solid #eee; }
-        .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; color: white; font-size: 0.8rem; margin-right: 5px; }
-        .btn-edit { background: var(--warning); color: #333; }
-        .btn-delete { background: var(--danger); }
-        .status { font-weight: bold; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
-        .active { color: #27ae60; }
-        .inactive { color: #95a5a6; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .navbar { background: var(--primary); padding: 15px 40px; display: flex; justify-content: space-between; color: white; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar .logo { font-size: 1.5rem; font-weight: bold; }
+        .navbar nav a { color: white; text-decoration: none; margin-left: 20px; transition: 0.3s; }
+        .navbar nav a:hover { color: var(--accent); }
+
+
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+        h1 { color: #333; margin-bottom: 30px; }
+
+        .btn-primary { 
+            display: inline-block; background: var(--accent); color: white; 
+            padding: 12px 24px; border-radius: 6px; text-decoration: none; 
+            font-weight: bold; margin-bottom: 25px; transition: 0.3s;
+            border: none; cursor: pointer;
+        }
+        .btn-primary:hover { background: #2980b9; transform: translateY(-2px); }
+
+        .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .data-table th { background: var(--primary); color: white; padding: 18px; text-align: left; font-size: 0.95rem; }
+        .data-table td { padding: 15px 18px; border-bottom: 1px solid #edf2f7; color: #4a5568; }
+        .data-table tr:hover { background-color: #f8fafc; }
+
+        .btn-edit { 
+            background: var(--warning); color: #333; padding: 8px 16px; 
+            border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; margin-right: 8px;
+        }
+        .btn-delete { 
+            background: var(--danger); color: white; padding: 8px 16px; 
+            border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
+            border: none; cursor: pointer;
+        }
+        .btn-edit:hover, .btn-delete:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -35,7 +48,7 @@
             <a th:href="@{/admin/dashboard}">Inicio</a>
             <a th:href="@{/admin/estudiantes}">Estudiantes</a>
             <a th:href="@{/admin/cursos}">Cursos</a>
-            <a th:href="@{/logout}" class="btn-logout">Salir</a>
+            <a th:href="@{/logout}">Salir</a>
         </nav>
     </header>
 
@@ -49,6 +62,7 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Código SENCE</th>
                     <th>Nombre</th>
                     <th>Horas</th>
@@ -58,12 +72,17 @@
             </thead>
             <tbody>
                 <tr th:each="c : ${cursos}">
+                    <td th:text="${c.id}"></td>
                     <td th:text="${c.codigo}"></td>
                     <td th:text="${c.nombre}"></td>
                     <td th:text="${c.duracionHoras + 'h'}"></td>
                     <td th:text="${c.categoria}"></td>
                     <td>
                         <a th:href="@{/admin/cursos/editar/{id}(id=${c.id})}" class="btn-edit">Editar</a>
+                        
+                        <a th:href="@{/admin/cursos/eliminar/{id}(id=${c.id})}" 
+                           class="btn-delete" 
+                           onclick="return confirm('¿Estás seguro de eliminar este curso?')">Eliminar</a>
                     </td>
                 </tr>
             </tbody>
