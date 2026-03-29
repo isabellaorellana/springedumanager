@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authenticationProvider(authProvider) 
+            .authenticationProvider(authProvider)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/css/**", "/js/**", "/img/**").permitAll() 
                 .requestMatchers("/admin/**").hasRole("ADMIN") 
@@ -49,12 +49,16 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(EstudianteRepository repo) {
         return email -> {
-            System.out.println("DEBUG: Buscando en BD a -> " + email);
-            Estudiante est = repo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No encontrado: " + email));
-
-            System.out.println("DEBUG: Encontrado. Hash en BD: " + est.getPassword());
+            System.out.println("🔍 DEBUG: Intentando buscar al usuario: [" + email + "]");
             
+            Estudiante est = repo.findByEmail(email)
+                .orElseThrow(() -> {
+                    System.out.println("❌ DEBUG: Usuario no encontrado en BD para: " + email);
+                    return new UsernameNotFoundException("Usuario no encontrado");
+                });
+
+            System.out.println("✅ DEBUG: Usuario encontrado. Password en BD (Hash): " + est.getPassword());
+
             return User.builder()
                 .username(est.getEmail())
                 .password(est.getPassword())

@@ -19,21 +19,18 @@ public class EdumanagerApplication {
     @Bean
     public CommandLineRunner initData(EstudianteRepository repo, BCryptPasswordEncoder encoder) {
         return args -> {
-            repo.findByEmail("admin@otec.cl").ifPresent(adminViejo -> {
-                repo.delete(adminViejo);
-            });
+            repo.findByEmail("admin@otec.cl").ifPresent(repo::delete);
 
             Estudiante admin = new Estudiante();
             admin.setNombre("Administrador");
             admin.setEmail("admin@otec.cl");
-            
             admin.setPassword(encoder.encode("admin123")); 
             
             repo.save(admin);
             
             System.out.println("----------------------------------------------");
-            System.out.println("✅ USUARIO ADMIN CREADO O ACTUALIZADO");
-            System.out.println("📧 Correo: admin@otec.cl");
+            System.out.println("🚀 ADMIN RE-CREADO CON ÉXITO");
+            System.out.println("📧 Usuario: admin@otec.cl");
             System.out.println("🔑 Clave: admin123");
             System.out.println("----------------------------------------------");
         };
