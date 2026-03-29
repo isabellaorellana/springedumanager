@@ -19,11 +19,15 @@
 <body>
     <nav class="navbar">
         <div style="font-weight: bold;">🎓 SpringEduManager</div>
-        <div><a href="/">Inicio</a><a href="/estudiantes">Estudiantes</a><a href="/cursos">Cursos</a></div>
+        <div>
+            <a th:href="@{/}">Inicio</a>
+            <a th:href="@{/admin/estudiantes}">Estudiantes</a>
+            <a th:href="@{/admin/cursos}">Cursos</a>
+        </div>
     </nav>
     <div class="container">
         <h1>Gestión de Estudiantes</h1>
-        <a href="/estudiantes/nuevo" class="btn-add">+ Registrar Nuevo Estudiante</a>
+        <a th:href="@{/admin/estudiantes/nuevo}" class="btn-add">+ Registrar Nuevo Estudiante</a>
         <table>
             <thead>
                 <tr>
@@ -34,11 +38,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="est : ${estudiantes}">
+                <tr th:each="est : ${listaEstudiantes}">
                     <td th:text="${est.id}"></td>
                     <td th:text="${est.nombre}"></td>
                     <td th:text="${est.email}"></td>
-                    <td th:text="${est.curso}"></td>
+                    <td th:text="${est.curso != null ? est.curso.nombre : 'Sin curso'}"></td>
                 </tr>
             </tbody>
         </table>
