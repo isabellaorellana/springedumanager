@@ -3,6 +3,7 @@ package cl.talento.otec.edumanager.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +18,7 @@ import cl.talento.otec.edumanager.repositorio.EstudianteRepository;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -27,12 +29,12 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         )
             .authenticationProvider(authProvider)
-            .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/login", "/home", "/css/**", "/js/**", "/img/**", "/static/**").permitAll() 
-            .requestMatchers("/admin/**").hasRole("ADMIN") 
-            .requestMatchers("/estudiante/**").hasAnyRole("USER", "ADMIN")
+           .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/", "/login", "/css/**", "/js/**", "/api/**").permitAll() 
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/estudiante/**").hasRole("USER")
             .anyRequest().authenticated()
-            )
+        )
 
             .formLogin(form -> form
     .loginPage("/")

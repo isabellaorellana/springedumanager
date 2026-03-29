@@ -1,31 +1,38 @@
-SpringEduManager: Sistema de Gestión Académica
-Este proyecto es una aplicación robusta desarrollada con Spring Boot 3.4, diseñada para gestionar el catálogo de cursos y el registro de estudiantes de una institución educativa. Implementa una arquitectura profesional de capas, seguridad perimetral y persistencia de datos en tiempo real.
+📑 SpringEduManager: Sistema de Gestión Académica OTEC Primavera
+
+Descripción del Proyecto
+SpringEduManager es una plataforma integral desarrollada con Spring Boot 3.2.0, diseñada para digitalizar la gestión de cursos y el seguimiento del progreso estudiantil. Este MVP resuelve la problemática de la OTEC Primavera, sustituyendo registros manuales por una arquitectura profesional con seguridad perimetral y persistencia de datos en tiempo real.
 
 🚀 Arquitectura y Patrones
-Para asegurar la escalabilidad exigida por la Coordinación Académica, el proyecto sigue una estructura de 4 Capas:
+Para asegurar la escalabilidad y el orden exigido en la rúbrica, el proyecto se organiza en 4 capas de responsabilidad:
 
-Modelo (Entity): Uso de JPA/Hibernate para mapear las tablas estudiantes y cursos en la base de datos.
-Repositorio: Interfaces que extienden de JpaRepository para operaciones CRUD automáticas sobre H2.
-Servicio: Capa de lógica de negocio que desacopla los controladores de la persistencia.
-Controlador (MVC & REST): * Controllers: Gestionan las vistas dinámicas con Thymeleaf.
-RestControllers: Exponen puntos de enlace JSON para interoperabilidad con otros sistemas (Lección 5).
+Modelo (Entity): Mapeo relacional con JPA/Hibernate de las tablas estudiantes y cursos.
+Repositorio: Interfaces que extienden de JpaRepository para operaciones CRUD sobre MariaDB.
+Controlador (MVC & REST): * Controllers: Gestión de vistas dinámicas con Thymeleaf.
+RestControllers: Exposición de endpoints JSON para asegurar la interoperabilidad con futuras aplicaciones móviles (Requerimiento Lección 5).
 
-🛡️ Seguridad (Lección 4)
-El sistema cuenta con Spring Security activo para proteger las rutas críticas.
-Roles: Configuración de rol ADMIN para la gestión de registros.
-Credenciales por defecto: * Usuario: admin
-Password: 123456
+🛡️ Seguridad y Acceso (Lección 4)
+Implementación robusta de Spring Security con protección de rutas y gestión de sesiones:
+Encriptación: Uso de BCryptPasswordEncoder para el resguardo seguro de credenciales.
+Roles Definidos: * ROLE_ADMIN: Acceso total a la gestión administrativa.
+ROLE_USER: Acceso exclusivo al portal de autogestión del estudiante (Caso: Elena Nito).
+
+Sincronización: El sistema incluye un CommandLineRunner que garantiza la integridad de las credenciales al iniciar la aplicación.
 
 🛠️ Stack Tecnológico
-Java 21 (OpenJDK Temurin): Última vanguardia en el entorno de ejecución.
-Spring Boot 3.4.x: Framework principal.
-Spring Data JPA: Abstracción de base de datos.
-H2 Database: Base de datos en memoria para desarrollo ágil y pruebas.
-Thymeleaf: Motor de plantillas con diseño CSS moderno y unificado.
-Maven: Gestión de dependencias y ciclo de vida del proyecto.
+Java 21: Uso de las últimas características de rendimiento del lenguaje.
+Spring Boot 3.2.0: Framework principal para el desarrollo ágil.
+Spring Data JPA: Abstracción de persistencia de datos.
+MariaDB: Motor de base de datos relacional para persistencia real y trazabilidad.
+Thymeleaf: Motor de plantillas con diseño responsivo.
+Maven: Gestión de dependencias y ciclo de vida (L5).
 
+📊 Endpoints y Acceso Local
+Portal Principal: http://localhost:8080/
+Gestión (Admin): http://localhost:8080/admin/dashboard
+Portal Estudiante: http://localhost:8080/estudiante/dashboar
+API REST (JSON): http://localhost:8080/api/estudiantes (Interoperabilidad).
 
-Acceso Web:
-
-Listado: http://localhost:8080/estudiantes
-Consola H2: http://localhost:8080/h2-console (JDBC URL: jdbc:h2:mem:edumanagerdb).
+Credenciales para ingresar:
+ADMIN: admin@otec.cl, contraseña: admin123
+Estudiantes: Ej: elenanito@gmail.com, contraseña: elena123
