@@ -101,10 +101,9 @@
                 <label>Asignar Curso:</label>
                 <select th:field="*{curso}" required>
                     <option value="" th:disabled="${estudiante.id != null}">-- Seleccione un curso --</option>
-                    <option th:each="c : ${listaCursos}" 
+                    <option th:each="c : ${cursos}" 
                             th:value="${c.id}" 
-                            th:text="${c.nombre}"
-                            th:selected="${estudiante.curso != null && c.id == estudiante.curso.id}">
+                            th:text="${c.nombre}">
                     </option>
                 </select>
             </div>
