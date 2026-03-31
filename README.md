@@ -1,37 +1,52 @@
-📑 SpringEduManager: Sistema de Gestión Académica OTEC Primavera
+SpringEduManager - OTEC Primavera
+SpringEduManager es una plataforma integral de gestión académica diseñada para la OTEC Primavera. El sistema permite administrar de manera eficiente la oferta educativa, el registro de estudiantes y la gestión de cursos, proporcionando interfaces diferenciadas según el rol del usuario.
 
-Descripción del Proyecto
-SpringEduManager es una plataforma integral desarrollada con Spring Boot 3.2.0, diseñada para digitalizar la gestión de cursos y el seguimiento del progreso estudiantil. Este MVP resuelve la problemática de la OTEC Primavera, sustituyendo registros manuales por una arquitectura profesional con seguridad perimetral y persistencia de datos en tiempo real.
-
-🚀 Arquitectura y Patrones
-Para asegurar la escalabilidad y el orden exigido en la rúbrica, el proyecto se organiza en 4 capas de responsabilidad:
-
-Modelo (Entity): Mapeo relacional con JPA/Hibernate de las tablas estudiantes y cursos.
-Repositorio: Interfaces que extienden de JpaRepository para operaciones CRUD sobre MariaDB.
-Controlador (MVC & REST): * Controllers: Gestión de vistas dinámicas con Thymeleaf.
-RestControllers: Exposición de endpoints JSON para asegurar la interoperabilidad con futuras aplicaciones móviles (Requerimiento Lección 5).
-
-🛡️ Seguridad y Acceso (Lección 4)
-Implementación robusta de Spring Security con protección de rutas y gestión de sesiones:
-Encriptación: Uso de BCryptPasswordEncoder para el resguardo seguro de credenciales.
-Roles Definidos: * ROLE_ADMIN: Acceso total a la gestión administrativa.
-ROLE_USER: Acceso exclusivo al portal de autogestión del estudiante (Caso: Elena Nito).
-
-Sincronización: El sistema incluye un CommandLineRunner que garantiza la integridad de las credenciales al iniciar la aplicación.
+🚀 Características Principales
+Gestión de Cursos y Usuarios: CRUD completo para el catálogo académico y perfiles de usuario.
+Seguridad y Control de Acceso: Implementación de Spring Security con encriptación BCrypt.
+Roles de Usuario:
+ADMIN: Acceso total a la gestión de datos, reportes y configuración.
+USER: Acceso al portal de autogestión y visualización de información académica.
+Interoperabilidad: Exposición de APIs RESTful para integración con otros sistemas.
+Interfaz Dinámica: Vistas renderizadas con Thymeleaf.
 
 🛠️ Stack Tecnológico
-Java 21: Uso de las últimas características de rendimiento del lenguaje.
-Spring Boot 3.2.0: Framework principal para el desarrollo ágil.
-Spring Data JPA: Abstracción de persistencia de datos.
-MariaDB: Motor de base de datos relacional para persistencia real y trazabilidad.
-Thymeleaf: Motor de plantillas con diseño responsivo.
-Maven: Gestión de dependencias y ciclo de vida (L5).
+Lenguaje: Java 21
+Framework Principal: Spring Boot 3.2.0
+Gestión de Dependencias: Maven
+Persistencia: Spring Data JPA
+Base de Datos: MariaDB
+Seguridad: Spring Security (BCrypt)
+Motor de Plantillas: Thymeleaf
 
-📊 Endpoints y Acceso Local
-Portal Principal: http://localhost:8080/
-Gestión (Admin): http://localhost:8080/admin/dashboard
-Portal Estudiante: http://localhost:8080/estudiante/dashboar
-API REST (JSON): http://localhost:8080/api/estudiantes (Interoperabilidad).
+📂 Arquitectura del Proyecto
+El sistema sigue el patrón de diseño MVC (Modelo-Vista-Controlador) y está organizado en una estructura de 4 capas para garantizar escalabilidad y mantenibilidad:
+
+Modelo (Entities): Representación de las tablas de la base de datos.
+Repositorio: Interfaz de comunicación con MariaDB mediante JPA.
+Servicio: Lógica de negocio y validaciones.
+Controlador: Manejo de peticiones HTTP y exposición de endpoints.
+
+⚙️ Configuración e Instalación
+Clonar el repositorio:
+
+Bash
+git clone https://github.com/isabellaorellana/springedumanager.git
+Configurar la Base de Datos:
+Crea una base de datos en MariaDB y actualiza las credenciales en el archivo src/main/resources/application.properties:
+
+Properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/nombre_tu_db
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_contraseña
+
+Ejecutar la aplicación:
+
+Bash
+mvn spring-boot:run
+📝 Licencia
+Este proyecto fue desarrollado para fines académicos y profesionales.
+
 
 Credenciales para ingresar:
 ADMIN: admin@otec.cl, contraseña: admin123
