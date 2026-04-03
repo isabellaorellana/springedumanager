@@ -26,7 +26,7 @@ Thymeleaf: Para renderizar interfaces dinámicas de manera eficiente desde el se
 
 ✅ Gestión Académica: CRUD completo de cursos, alumnos y matrículas.
 
-🔐 Seguridad Avanzada: Encriptación BCrypt y protección contra vulnerabilidades comunes.
+🔐 Seguridad Avanzada: Encriptación BCrypt y protección contra vulnerabilidades.
 
 👥 Roles Diferenciados:
 
@@ -34,7 +34,7 @@ ADMIN: Gestión total de la plataforma y reportes.
 
 USER: Portal de consulta y autogestión académica.
 
-🏗️ Arquitectura Limpia: Organización en 4 capas (MVC) para mayor escalabilidad.
+🏗️ Arquitectura Limpia: Organización en 4 capas (MVC).
 
 🛠️ Stack Tecnológico
 
