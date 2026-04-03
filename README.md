@@ -1,99 +1,75 @@
-SpringEduManager - OTEC Primavera 🎓
+# SpringEduManager - OTEC Primavera 🎓
 
-SpringEduManager es una plataforma de gestión académica diseñada para la OTEC Primavera. El sistema optimiza la administración de oferta educativa, registro de estudiantes y control de cursos, garantizando una experiencia de usuario fluida y segura.
+**SpringEduManager** es una plataforma de gestión académica integral diseñada para optimizar la administración de oferta educativa, registro de estudiantes y control de cursos, garantizando una experiencia de usuario fluida y segura.
 
-🧠 Caso de Estudio: Seguridad y Control de Acceso (RBAC)
+---
 
-Este proyecto fue seleccionado para el portafolio debido a su arquitectura robusta y la implementación de lógica de negocio crítica.
+## 🧠 Caso de Estudio: Seguridad y Control de Acceso (RBAC)
+Este proyecto destaca por su arquitectura robusta y la implementación de lógica de negocio crítica.
 
-1. Descripción del Desafío
+### 1. El Desafío
+Implementar un sistema de **Control de Acceso Basado en Roles (RBAC)** para asegurar que los administradores gestionen la academia mientras los estudiantes solo acceden a su información personal.
 
-El mayor reto técnico fue implementar un sistema de Control de Acceso Basado en Roles (RBAC). Era imperativo asegurar que solo los administradores pudieran gestionar datos académicos, mientras que los estudiantes solo tuvieran acceso a su información personal, eliminando riesgos de manipulación de datos sensibles.
+### 2. La Solución
+Se utilizó **Spring Security 6** con una arquitectura personalizada, configurando un `SecurityFilterChain` para reglas granulares y **BCrypt** para la protección de credenciales.
 
-2. Solución Propuesta
+### 3. Justificación del Stack
+* **Spring Boot 3.2**: Ecosistema maduro y rapidez en servicios REST.
+* **MariaDB**: Consistencia y eficiencia en integridad referencial.
+* **Thymeleaf**: Renderizado dinámico eficiente desde el servidor.
 
-Se implementó Spring Security 6 mediante una arquitectura personalizada. Se configuró un SecurityFilterChain para definir reglas de acceso granulares por URL y se utilizó BCrypt para la encriptación de contraseñas, protegiendo la identidad de los usuarios.
+---
 
-3. Justificación de Herramientas
+## 🚀 Características Principales
+* ✅ **Gestión Académica**: CRUD completo de cursos, alumnos y matrículas.
+* 🔐 **Seguridad Avanzada**: Encriptación BCrypt y protección contra vulnerabilidades (CSRF, XSS).
+* 👥 **Roles Diferenciados**:
+    * `ADMIN`: Gestión total y reportes.
+    * `USER`: Portal de consulta y autogestión.
+* 🏗️ **Arquitectura Limpia**: Organización en 4 capas (MVC).
 
-Spring Boot 3.2: Por su ecosistema maduro y rapidez para desplegar servicios REST.
+---
 
-MariaDB: Por su consistencia y eficiencia en el manejo de integridad referencial.
+## 🛠️ Stack Tecnológico
 
-Thymeleaf: Para renderizar interfaces dinámicas de manera eficiente desde el servidor.
+| Componente | Tecnología |
+| :--- | :--- |
+| **Lenguaje** | Java 25 (OpenJDK Temurin) |
+| **Framework** | Spring Boot 3.2.0 |
+| **Persistencia** | Spring Data JPA |
+| **Base de Datos** | MariaDB |
+| **Seguridad** | Spring Security 6 |
+| **Vistas** | Thymeleaf + HTML5 / CSS3 |
 
-🚀 Características Principales
+---
 
-✅ Gestión Académica: CRUD completo de cursos, alumnos y matrículas.
+## 📂 Arquitectura del Proyecto (MVC)
+El sistema separa las responsabilidades de forma clara:
+* **Modelo (Entities)**: Mapeo relacional de datos.
+* **Repositorio**: Comunicación con MariaDB mediante JPA.
+* **Servicio**: Capa de lógica de negocio y validaciones.
+* **Controlador**: Gestión de peticiones y flujo de la aplicación.
 
-🔐 Seguridad Avanzada: Encriptación BCrypt y protección contra vulnerabilidades.
+---
 
-👥 Roles Diferenciados:
+## 📝 Credenciales de Prueba (Demo)
+| Rol | Usuario | Contraseña |
+| :--- | :--- | :--- |
+| **ADMIN** | `admin@otec.cl` | `admin123` |
+| **ESTUDIANTE** | `elenanito@gmail.com` | `elena123` |
 
-ADMIN: Gestión total de la plataforma y reportes.
+---
 
-USER: Portal de consulta y autogestión académica.
+## ⚙️ Instalación y Configuración
 
-🏗️ Arquitectura Limpia: Organización en 4 capas (MVC).
-
-🛠️ Stack Tecnológico
-
-Componente
-
-Tecnología
-
-Lenguaje
-
-Java 25 (OpenJDK Temurin)
-
-Framework
-
-Spring Boot 3.2.0
-
-Persistencia
-
-Spring Data JPA
-
-Base de Datos
-
-MariaDB
-
-Seguridad
-
-Spring Security 6
-
-Vistas
-
-Thymeleaf + HTML5 / CSS3
-
-📂 Arquitectura del Proyecto
-
-El sistema sigue el patrón de diseño MVC (Modelo-Vista-Controlador):
-
-Modelo (Entities): Mapeo relacional de datos.
-
-Repositorio: Interfaz de comunicación con MariaDB mediante JPA.
-
-Servicio: Capa de lógica de negocio y validaciones.
-
-Controlador: Gestión de peticiones y flujo de la aplicación.
-
-📝 Credenciales de Prueba (Demo)
-
-Rol
-
-Usuario
-
-Contraseña
-
-ADMIN
-
-admin@otec.cl
-
-admin123
-
-ESTUDIANTE
-
-elenanito@gmail.com
-
-elena123
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone https://github.com/tu-usuario/SpringEduManager.git
+    ```
+2.  **Base de Datos:**
+    * Crear base de datos `otec_primavera` en MariaDB.
+    * Configurar credenciales en `src/main/resources/application.properties`.
+3.  **Ejecutar:**
+    ```bash
+    ./mvnw spring-boot:run
+    ```
